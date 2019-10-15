@@ -13,17 +13,19 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// const protectedRoute = (req,res,next) => {
-//   try {
-//     if (!req.cookies.token) {
-//       throw new Error()
-//     }
-//   } catch(err) {
-//     next()
-//   }
-// }
+const protectedRoutes = (req, res, next) => {
+  try {
+    if (!req.cookies.token) {
+      throw new Error();
+    }
+    req.user = jwt.verify(req.cookies.token, "secretkey");
+    next();
+  } catch (error) {
+    res.status(401).end("You are not authorized");
+  }
+};
 
-router.get("/:name", async (req, res, next) => {
+router.get("/:name", protectedRoutes, async (req, res, next) => {
   try {
     const userFirstName = req.params.name;
     const regex = new RegExp(userFirstName, "gi");
@@ -54,15 +56,19 @@ router.post("/login", async (req, res, next) => {
     if (!passwordCheck) {
       throw new Error("Wrong password!");
     }
-    const token = jwt.sign({ name: user.username }, "secretkey", {
-      algorithm: "RS256"
-    });
+    const token = jwt.sign({ name: user.username }, "secretkey");
     res.cookie("token", token);
     res.send(user);
   } catch (err) {
-    err.status = 400;
-    next();
+    if (err.message === "Wrong password!") {
+      err.status = 400;
+    }
+    next(err);
   }
+});
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("token").send("You are now logged out!");
 });
 
 router.delete("/delete/:id", async (req, res, next) => {
