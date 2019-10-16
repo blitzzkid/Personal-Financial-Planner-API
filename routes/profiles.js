@@ -11,6 +11,15 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/:username", async (req, res, next) => {
+  try {
+    const profile = await Profile.find({ username: req.params.username });
+    res.send(profile);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post("/new", async (req, res, next) => {
   try {
     const profile = new Profile(req.body);
