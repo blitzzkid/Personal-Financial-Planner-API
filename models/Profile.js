@@ -8,6 +8,6 @@ const profileSchema = new mongoose.Schema({
   interestRate: Number
 });
 
-const Profile = mongoose.model("User", profileSchema);
+const Profile = mongoose.model("Profile", profileSchema);
 
 module.exports = Profile;
