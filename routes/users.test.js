@@ -5,7 +5,7 @@ const User = require("../models/User");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 // const jwt = require("jsonwebtoken");
 
-jest.mock("jsonwebtoken");
+// jest.mock("jsonwebtoken");
 
 describe("Testing for the users on a separate in-memory server", () => {
   let mongoServer;
@@ -53,4 +53,12 @@ describe("Testing for the users on a separate in-memory server", () => {
       expect(user.lastName).toBe("Dylan");
     });
   });
-})
+  describe("[DEL] remove an existing user", () => {
+    it("Should delete an existing user", () => {
+      request(app)
+        .delete("users/delete")
+        .expect(200)
+        .expect("Successfully deleted user");
+    });
+  });
+});

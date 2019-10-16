@@ -18,7 +18,7 @@ const protectedRoutes = (req, res, next) => {
     if (!req.cookies.token) {
       throw new Error();
     }
-    req.user = jwt.verify(req.cookies.token, "secretkey");
+    req.user = jwt.verify(req.cookies.token, process.env.JWT_SECRET_KEY);
     next();
   } catch (error) {
     res.status(401).end("You are not authorized");
@@ -56,7 +56,7 @@ router.post("/login", async (req, res, next) => {
     if (!passwordCheck) {
       throw new Error("Wrong password!");
     }
-    const token = jwt.sign({ name: user.username }, "secretkey");
+    const token = jwt.sign({ name: user.username }, process.env.JWT_SECRET_KEY);
     res.cookie("token", token);
     res.send(user);
   } catch (err) {
