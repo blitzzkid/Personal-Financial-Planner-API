@@ -44,6 +44,9 @@ router.post("/new", async (req, res, next) => {
     res.send(newUser);
   } catch (err) {
     console.error(err);
+    if (err.name === "MongoError" && err.code === 11000) {
+      err.status = 400;
+    }
     next(err);
   }
 });
