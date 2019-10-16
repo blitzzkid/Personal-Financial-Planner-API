@@ -12,4 +12,7 @@ app.use(express.json());
 const User = require("./routes/users");
 app.use("/users", User);
 
+const Profile = require("./routes/profiles")
+app.use("/profiles", Profile)
+
 module.exports = app;
