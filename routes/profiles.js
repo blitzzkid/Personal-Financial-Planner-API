@@ -23,19 +23,25 @@ router.post("/new", async (req, res, next) => {
   }
 });
 
-// router.put("/:username", async (req, res, next) => {
-//   try {
-//     const profileToUpdate = req.params.username;
-//     const regex = new RegExp(profileToUpdate, "gi");
-//     const newProfileDetails = req.body;
-//     const updatedProfile = await Profile.findOneAndReplace(
-//       { name: regex },
-//       { newProfileDetails }
-//     );
-//     res.send(updatedProfile);
-//   } catch (err) {
-//     next(err);
-//   }
-// });
+router.put("/:username", async (req, res, next) => {
+  try {
+    const profileToUpdate = req.params.username;
+    const updatedProfile = await Profile.findOneAndReplace(
+      { username: profileToUpdate },
+      {
+        username: req.body.username,
+        birthYear: req.body.birthYear,
+        retirementAge: req.body.retirementAge,
+        passingAge: req.body.passingAge,
+        retirementIncome: req.body.retirementIncome,
+        interestRate: req.body.interestRate
+      },
+      { new: true }
+    );
+    res.send(updatedProfile);
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;
