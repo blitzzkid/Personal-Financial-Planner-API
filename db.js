@@ -5,7 +5,8 @@ let dbUrl = `mongodb://localhost/${dbName}`;
 
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useCreateIndex: true
 });
 
 const db = mongoose.connection;

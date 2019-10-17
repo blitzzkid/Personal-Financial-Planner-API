@@ -27,8 +27,8 @@ describe("Testing for the users on a separate in-memory server", () => {
     await mongoServer.stop();
   });
   beforeEach(async () => {
-    const users = [{ username: "testuser123", password: "password321" }];
-    await User.create(users);
+    const user = [{ username: "testuser123", password: "password321" }];
+    await User.create(user);
   });
   afterEach(async () => {
     jest.resetAllMocks();
@@ -53,12 +53,34 @@ describe("Testing for the users on a separate in-memory server", () => {
       expect(user.lastName).toBe("Dylan");
     });
   });
-  describe("[DEL] remove an existing user", () => {
-    it("Should delete an existing user", () => {
-      request(app)
-        .delete("users/delete")
-        .expect(200)
-        .expect("Successfully deleted user");
-    });
-  });
+  // describe("[POST] Attempt to login an existing user", () => {
+  //   it("Should allow an existing user to login if the password is correct", async () => {
+  //     const existingUser = {
+  //       username: "testuser123",
+  //       password: "password321"
+  //     };
+  //     await request(app)
+  //       .post("users/login")
+  //       .send(existingUser)
+  //       .expect(200);
+  //   });
+  // it("Should not allow an existing user to login if the password is wrong", async () => {
+  //   const existingUser = {
+  //     username: "testuser123",
+  //     password: "wrongpassword"
+  //   };
+  //   await request(app)
+  //     .post("users/login")
+  //     .send(existingUser)
+  //     .expect(400);
+  // });
+  // });
+  // describe("[DEL] remove an existing user", () => {
+  //   it("Should delete an existing user", async () => {
+  //     await request(app)
+  //       .delete("users/delete/testuser123")
+  //       .expect(200)
+  //       .expect("Successfully deleted user");
+  //   });
+  // });
 });
