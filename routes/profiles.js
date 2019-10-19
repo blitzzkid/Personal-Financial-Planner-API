@@ -53,4 +53,15 @@ router.put("/:username", async (req, res, next) => {
   }
 });
 
+router.delete("/delete/:username", async (req, res, next) => {
+  try {
+    const userToDelete = req.params.username;
+    await Profile.findOneAndDelete({ username: userToDelete });
+    res.send("Successfully deleted user profile");
+  } catch (err) {
+    err.status = 400;
+    next(err);
+  }
+});
+
 module.exports = router;
