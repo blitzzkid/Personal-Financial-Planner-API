@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const protectedRoutes = require("./protectedRoutes");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -13,19 +14,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-const protectedRoutes = (req, res, next) => {
-  try {
-    if (!req.cookies.token) {
-      throw new Error();
-    }
-    req.user = jwt.verify(req.cookies.token, process.env.JWT_SECRET_KEY);
-    next();
-  } catch (error) {
-    res.status(401).end("You are not authorized");
-  }
-};
-
-router.get("/:name", protectedRoutes, async (req, res, next) => {
+router.get("/:name", async (req, res, next) => {
   try {
     const userFirstName = req.params.name;
     const regex = new RegExp(userFirstName, "gi");
@@ -74,7 +63,7 @@ router.post("/logout", (req, res) => {
   res.clearCookie("token").send("You are now logged out!");
 });
 
-router.delete("/delete/:username", async (req, res, next) => {
+router.delete("/delete/:username", protectedRoutes, async (req, res, next) => {
   try {
     const userToDelete = req.params.username;
     await User.findOneAndDelete({ username: userToDelete });

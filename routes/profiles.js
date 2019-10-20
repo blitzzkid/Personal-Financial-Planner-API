@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Profile = require("../models/Profile");
+const protectedRoutes = require("./protectedRoutes");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -11,7 +12,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:username", async (req, res, next) => {
+router.get("/:username", protectedRoutes, async (req, res, next) => {
   try {
     const profile = await Profile.find({ username: req.params.username });
     res.send(profile);
@@ -32,7 +33,7 @@ router.post("/new", async (req, res, next) => {
   }
 });
 
-router.put("/:username", async (req, res, next) => {
+router.put("/:username", protectedRoutes, async (req, res, next) => {
   try {
     const profileToUpdate = req.params.username;
     const updatedProfile = await Profile.findOneAndReplace(
@@ -53,7 +54,7 @@ router.put("/:username", async (req, res, next) => {
   }
 });
 
-router.delete("/delete/:username", async (req, res, next) => {
+router.delete("/delete/:username", protectedRoutes, async (req, res, next) => {
   try {
     const userToDelete = req.params.username;
     await Profile.findOneAndDelete({ username: userToDelete });
