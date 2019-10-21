@@ -63,10 +63,9 @@ router.post("/logout", (req, res) => {
   res.clearCookie("token").send("You are now logged out!");
 });
 
-router.delete("/delete/:username", protectedRoutes, async (req, res, next) => {
+router.delete("/", protectedRoutes, async (req, res, next) => {
   try {
-    const userToDelete = req.params.username;
-    await User.findOneAndDelete({ username: userToDelete });
+    await User.findOneAndDelete({ username: req.user.name });
     res.send("Successfully deleted user");
   } catch (err) {
     err.status = 400;

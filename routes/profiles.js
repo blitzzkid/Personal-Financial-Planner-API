@@ -54,10 +54,9 @@ router.put("/:username", protectedRoutes, async (req, res, next) => {
   }
 });
 
-router.delete("/delete/:username", protectedRoutes, async (req, res, next) => {
+router.delete("/", protectedRoutes, async (req, res, next) => {
   try {
-    const userToDelete = req.params.username;
-    await Profile.findOneAndDelete({ username: userToDelete });
+    await Profile.findOneAndDelete({ username: req.user.name });
     res.send("Successfully deleted user profile");
   } catch (err) {
     err.status = 400;

@@ -35,7 +35,7 @@ describe("Testing for the users on a separate in-memory server", () => {
     await User.deleteMany();
   });
   describe("[POST] add a new user", () => {
-    it("Should add a new user", async () => {
+    xit("Should add a new user", async () => {
       const newUser = {
         firstName: "Bob",
         lastName: "Dylan",

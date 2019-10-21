@@ -23,7 +23,7 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
     await mongoServer.stop();
   });
   describe("[POST] create a profile for an existing user", () => {
-    it("Should add a profile for the user", async () => {
+    xit("Should add a profile for the user", async () => {
       const newProfile = {
         username: "user123"
       };
@@ -36,7 +36,7 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
     });
   });
   describe("[PUT] update a profile for an existing user", () => {
-    it("Should update the profile for the user", async () => {
+    xit("Should update the profile for the user", async () => {
       const updatedProfile = {
         username: "user124",
         birthYear: 1991,
