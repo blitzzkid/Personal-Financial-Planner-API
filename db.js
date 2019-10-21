@@ -1,7 +1,15 @@
 const mongoose = require("mongoose");
 const dbName = "users-db";
 
-let dbUrl = `mongodb://localhost/${dbName}`;
+let dbUrl;
+
+if (process.env.NODE_ENV === "development") {
+  dbUrl = `mongodb://localhost/${dbName}`;
+}
+
+if (process.env.NODE_ENV === "production") {
+  dbUrl = process.env.MONGO_URI;
+}
 
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
