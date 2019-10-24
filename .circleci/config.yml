@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: node:12.13.0-alpine
+    steps:
+      - checkout
+      - run:
+          name: "install package manager"
+          command: "npm install"
+      - run:
+          name: "run test"
+          command: "npm test"
+  deploy:
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+
+workflows:
+  version: 2
+  runTest:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
