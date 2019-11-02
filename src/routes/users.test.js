@@ -34,6 +34,7 @@ describe("Testing for the users on a separate in-memory server", () => {
     jest.resetAllMocks();
     await User.deleteMany();
   });
+
   describe("[POST] add a new user", () => {
     xit("Should add a new user", async () => {
       const newUser = {
@@ -53,6 +54,7 @@ describe("Testing for the users on a separate in-memory server", () => {
       expect(user.lastName).toBe("Dylan");
     });
   });
+
   // describe("[POST] Attempt to login an existing user", () => {
   //   it("Should allow an existing user to login if the password is correct", async () => {
   //     const existingUser = {
@@ -64,6 +66,7 @@ describe("Testing for the users on a separate in-memory server", () => {
   //       .send(existingUser)
   //       .expect(200);
   //   });
+  
   // it("Should not allow an existing user to login if the password is wrong", async () => {
   //   const existingUser = {
   //     username: "testuser123",
@@ -75,6 +78,7 @@ describe("Testing for the users on a separate in-memory server", () => {
   //     .expect(400);
   // });
   // });
+
   // describe("[DEL] remove an existing user", () => {
   //   it("Should delete an existing user", async () => {
   //     await request(app)

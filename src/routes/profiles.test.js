@@ -22,6 +22,7 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
     await mongoose.disconnect();
     await mongoServer.stop();
   });
+
   describe("[POST] create a profile for an existing user", () => {
     xit("Should add a profile for the user", async () => {
       const newProfile = {
@@ -35,6 +36,7 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
       expect(profile.username).toBe("user123");
     });
   });
+  
   describe("[PUT] update a profile for an existing user", () => {
     xit("Should update the profile for the user", async () => {
       const updatedProfile = {

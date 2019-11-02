@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const profileSchema = new mongoose.Schema({
   username: { type: String, required: true },
-  birthYear: Number,
-  retirementAge: Number,
-  passingAge: Number,
-  retirementIncome: Number,
-  interestRate: Number
+  birthYear: { type: Number },
+  retirementAge: { type: Number },
+  passingAge: { type: Number },
+  retirementIncome: { type: Number },
+  interestRate: { type: Number }
 });
 
 const Profile = mongoose.model("Profile", profileSchema);
