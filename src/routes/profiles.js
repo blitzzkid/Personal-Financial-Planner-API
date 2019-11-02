@@ -5,8 +5,8 @@ const protectedRoutes = require("./protectedRoutes");
 
 router.get("/", async (req, res, next) => {
   try {
-    const profiles = await Profile.find(req.query);
-    res.send(profiles);
+    const profiles = await Profile.find();
+    res.status(200).send(profiles);
   } catch (err) {
     next(err);
   }
@@ -15,7 +15,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:username", protectedRoutes, async (req, res, next) => {
   try {
     const profile = await Profile.find({ username: req.params.username });
-    res.send(profile);
+    res.status(200).send(profile);
   } catch (err) {
     next(err);
   }
@@ -26,7 +26,7 @@ router.post("/new", async (req, res, next) => {
     const profile = new Profile(req.body);
     await Profile.init();
     const newProfile = await profile.save();
-    res.send(newProfile);
+    res.status(200).send(newProfile);
   } catch (err) {
     console.error(err);
     next(err);
@@ -48,7 +48,7 @@ router.put("/:username", protectedRoutes, async (req, res, next) => {
       },
       { new: true }
     );
-    res.send(updatedProfile);
+    res.status(200).send(updatedProfile);
   } catch (err) {
     next(err);
   }

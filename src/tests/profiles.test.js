@@ -4,7 +4,9 @@ const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
 describe("Testing for the user's profile on a separate in-memory server", () => {
+
   let mongoServer;
+
   beforeAll(async () => {
     try {
       mongoServer = new MongoMemoryServer();
@@ -18,13 +20,14 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
       console.error(err);
     }
   });
+
   afterAll(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
   });
 
   describe("[POST] create a profile for an existing user", () => {
-    xit("Should add a profile for the user", async () => {
+    it("Should add a profile for the user", async () => {
       const newProfile = {
         username: "user123"
       };
@@ -36,7 +39,7 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
       expect(profile.username).toBe("user123");
     });
   });
-  
+
   describe("[PUT] update a profile for an existing user", () => {
     xit("Should update the profile for the user", async () => {
       const updatedProfile = {
