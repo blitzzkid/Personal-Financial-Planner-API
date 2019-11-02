@@ -50,7 +50,7 @@ router.post("/login", async (req, res, next) => {
     }
     const token = jwt.sign({ name: user.username }, process.env.JWT_SECRET_KEY);
     res.cookie("token", token);
-    res.send(user);
+    res.send("Sucessfully logged in!");
   } catch (err) {
     if (err.message === "Wrong password!") {
       err.status = 400;
