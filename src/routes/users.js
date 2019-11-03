@@ -14,13 +14,17 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:name", async (req, res, next) => {
+router.get("/:username", async (req, res, next) => {
   try {
-    const userFirstName = req.params.name;
-    const regex = new RegExp(userFirstName, "gi");
-    const user = await User.find({ firstName: regex });
-    res.send(user);
+    const username = req.params.username;
+    const regex = new RegExp(username, "gi");
+    const user = await User.find({ username: regex });
+    const fullName = { fullName: user[0].fullName };
+    res.send(fullName);
   } catch (err) {
+    if (err.name === "TypeError") {
+      err.status = 400
+    }
     next(err);
   }
 });
@@ -32,7 +36,6 @@ router.post("/new", async (req, res, next) => {
     const newUser = await user.save();
     res.send(newUser);
   } catch (err) {
-    console.error(err);
     if (err.name === "MongoError" && err.code === 11000) {
       err.status = 400;
     }
@@ -68,7 +71,6 @@ router.delete("/", protectedRoutes, async (req, res, next) => {
     await User.findOneAndDelete({ username: req.user.name });
     res.send("Successfully deleted user");
   } catch (err) {
-    err.status = 400;
     next(err);
   }
 });
