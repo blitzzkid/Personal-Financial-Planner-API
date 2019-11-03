@@ -28,7 +28,9 @@ router.post("/new", async (req, res, next) => {
     const newProfile = await profile.save();
     res.status(200).send(newProfile);
   } catch (err) {
-    console.error(err);
+    if (err.name === "MongoError" && err.code === 11000) {
+      err.status = 400;
+    }
     next(err);
   }
 });
@@ -59,7 +61,6 @@ router.delete("/", protectedRoutes, async (req, res, next) => {
     await Profile.findOneAndDelete({ username: req.user.name });
     res.clearCookie("token").send("Successfully deleted user profile");
   } catch (err) {
-    err.status = 400;
     next(err);
   }
 });

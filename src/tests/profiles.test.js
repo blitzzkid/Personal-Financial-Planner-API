@@ -39,7 +39,7 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
     await Profile.deleteMany();
   });
 
-  describe("[GET] get all profiles", () => {
+  describe("[GET] get profiles", () => {
     it("should return all the profiles in the collection", async () => {
       const response = await request(app).get("/profiles/");
 
@@ -73,16 +73,27 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
   });
 
   describe("[POST] create a profile for an existing user", () => {
-    it("Should add a profile for the user", async () => {
+    it("Should create a profile for the user", async () => {
       const newProfile = {
-        username: "user123"
+        username: "user126"
       };
       const { body: profile } = await request(app)
         .post("/profiles/new")
         .send(newProfile)
         .expect(200);
 
-      expect(profile.username).toBe("user123");
+      expect(profile.username).toBe("user126");
+    });
+
+    it("Should not create a new profile if it already exists for that username", async () => {
+      const newProfile = {
+        username: "user123"
+      };
+      const response = await request(app)
+        .post("/profiles/new")
+        .send(newProfile);
+
+      expect(response.status).toBe(400);
     });
   });
 
@@ -105,6 +116,27 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
       expect(response.status).toBe(200);
       expect(jwt.verify).toHaveBeenCalledTimes(1);
       expect(() => expect.objecContaining(updatedProfile));
+    });
+  });
+
+  describe("[DEL] delete an existing profile", () => {
+    it("should delete an existing user profile if the user is logged in", async () => {
+      jwt.verify.mockReturnValueOnce({});
+
+      const response = await request(app)
+        .delete("/profiles/")
+        .set("Cookie", "token=valid-token");
+
+      expect(response.status).toBe(200);
+      expect(jwt.verify).toHaveBeenCalledTimes(1);
+      expect(response.text).toBe("Successfully deleted user profile");
+    });
+
+    it("Should not be able to delete an existing user profile if not logged in", async () => {
+      const response = await request(app).delete("/profiles/");
+
+      expect(response.status).toBe(401);
+      expect(response.text).toBe("You are not authorized");
     });
   });
 });
