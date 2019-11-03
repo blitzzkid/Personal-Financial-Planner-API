@@ -27,5 +27,21 @@ module.exports.mockProfiles = [
     passingAge: 75,
     retirementIncome: 1500,
     interestRate: 6
+  },
+  {
+    username: "user123",
+    birthYear: 1991,
+    retirementAge: 65,
+    passingAge: 85,
+    retirementIncome: 1500,
+    interestRate: 6
+  },
+  {
+    username: "user125",
+    birthYear: 1989,
+    retirementAge: 60,
+    passingAge: 80,
+    retirementIncome: 1000,
+    interestRate: 5
   }
 ];

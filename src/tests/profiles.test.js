@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const Profile = require("../models/Profile");
 const { mockProfiles } = require("./mockData");
+const jwt = require("jsonwebtoken");
+
+jest.mock("jsonwebtoken");
 
 describe("Testing for the user's profile on a separate in-memory server", () => {
   let mongoServer;
@@ -36,6 +39,39 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
     await Profile.deleteMany();
   });
 
+  describe("[GET] get all profiles", () => {
+    it("should return all the profiles in the collection", async () => {
+      const response = await request(app).get("/profiles/");
+
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body.length).toBe(3);
+    });
+
+    it("should return the specified profile in the collection", async () => {
+      jwt.verify.mockReturnValueOnce({});
+      const response = await request(app)
+        .get("/profiles/user123")
+        .set("Cookie", "token=valid-token");
+
+      expect(response.status).toBe(200);
+      expect(jwt.verify).toHaveBeenCalledTimes(1);
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body[0].birthYear).toBe(1991);
+      expect(response.body[0].retirementAge).toBe(65);
+      expect(response.body[0].passingAge).toBe(85);
+      expect(response.body[0].retirementIncome).toBe(1500);
+      expect(response.body[0].interestRate).toBe(6);
+    });
+
+    it("should not return the specified profile in the collection if user is not logged in", async () => {
+      const response = await request(app).get("/profiles/user123");
+
+      expect(response.status).toBe(401);
+      expect(response.text).toBe("You are not authorized");
+    });
+  });
+
   describe("[POST] create a profile for an existing user", () => {
     it("Should add a profile for the user", async () => {
       const newProfile = {
@@ -51,7 +87,8 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
   });
 
   describe("[PUT] update a profile for an existing user", () => {
-    xit("Should update the profile for the user", async () => {
+    it("Should update the profile for the user", async () => {
+      jwt.verify.mockReturnValueOnce({});
       const updatedProfile = {
         username: "user124",
         birthYear: 1991,
@@ -60,12 +97,14 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
         retirementIncome: 1000,
         interestRate: 5
       };
-      const { body: profile } = await request(app)
+      const response = await request(app)
         .put("/profiles/user124")
-        .send(updatedProfile)
-        .expect(200);
+        .set("Cookie", "token=valid-token")
+        .send(updatedProfile);
 
-      expect(() => expect.objecContaining(profile));
+      expect(response.status).toBe(200);
+      expect(jwt.verify).toHaveBeenCalledTimes(1);
+      expect(() => expect.objecContaining(updatedProfile));
     });
   });
 });

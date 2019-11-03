@@ -43,23 +43,23 @@ describe("Testing for the users on a separate in-memory server", () => {
     it("should get all users", async () => {
       const response = await request(app).get("/users/");
 
-      expect(response.status).toEqual(200);
-      expect(Array.isArray(response.body)).toEqual(true);
-      expect(response.body.length).toEqual(3);
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body.length).toBe(3);
     });
 
     it("should get the full name of a specified user", async () => {
       const response = await request(app).get("/users/user123");
 
-      expect(response.status).toEqual(200);
-      expect(Array.isArray(response.body)).toEqual(false);
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(false);
       expect(response.body.fullName).toBe("Bob Dylan");
     });
 
     it("should throw an error if specified user does not exist", async () => {
       const response = await request(app).get("/users/user122");
 
-      expect(response.status).toEqual(400);
+      expect(response.status).toBe(400);
     });
   });
 
@@ -75,8 +75,8 @@ describe("Testing for the users on a separate in-memory server", () => {
         .post("/users/new")
         .send(newUser);
 
-      expect(response.status).toEqual(200);
-      expect(Array.isArray(response.body)).toEqual(false);
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(false);
       expect(response.body.firstName).toBe("Harry");
       expect(response.body.lastName).toBe("Truman");
       expect(response.body.username).toBe("user126");
@@ -94,7 +94,7 @@ describe("Testing for the users on a separate in-memory server", () => {
         .post("/users/new")
         .send(newUser);
 
-      expect(response.status).toEqual(400);
+      expect(response.status).toBe(400);
     });
   });
 
@@ -108,7 +108,7 @@ describe("Testing for the users on a separate in-memory server", () => {
         .post("/users/login")
         .send(existingUser);
 
-      expect(response.status).toEqual(200);
+      expect(response.status).toBe(200);
     });
 
     it("[POST] Should not allow an existing user to login if the password is wrong", async () => {
@@ -120,13 +120,13 @@ describe("Testing for the users on a separate in-memory server", () => {
         .post("/users/login")
         .send(existingUser);
 
-      expect(response.status).toEqual(400);
+      expect(response.status).toBe(400);
     });
 
     it("[POST] Should allow the user to log out", async () => {
       const response = await request(app).post("/users/logout");
 
-      expect(response.status).toEqual(200);
+      expect(response.status).toBe(200);
       expect(response.text).toEqual("You are now logged out!");
     });
   });
@@ -139,16 +139,16 @@ describe("Testing for the users on a separate in-memory server", () => {
         .delete("/users/")
         .set("Cookie", "token=valid-token");
 
-      expect(response.status).toEqual(200);
+      expect(response.status).toBe(200);
       expect(jwt.verify).toHaveBeenCalledTimes(1);
-      expect(response.text).toEqual("Successfully deleted user");
+      expect(response.text).toBe("Successfully deleted user");
     });
 
     it("Should not be able to delete an existing user if not logged in", async () => {
       const response = await request(app).delete("/users/");
 
-      expect(response.status).toEqual(401);
-      expect(response.text).toEqual("You are not authorized");
+      expect(response.status).toBe(401);
+      expect(response.text).toBe("You are not authorized");
     });
   });
 });
