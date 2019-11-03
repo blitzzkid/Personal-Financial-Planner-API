@@ -2,9 +2,10 @@ const app = require("../app");
 const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
+const Profile = require("../models/Profile");
+const { mockProfiles } = require("./mockData");
 
 describe("Testing for the user's profile on a separate in-memory server", () => {
-
   let mongoServer;
 
   beforeAll(async () => {
@@ -24,6 +25,15 @@ describe("Testing for the user's profile on a separate in-memory server", () => 
   afterAll(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
+  });
+
+  beforeEach(async () => {
+    await Profile.create(mockProfiles);
+  });
+
+  afterEach(async () => {
+    jest.resetAllMocks();
+    await Profile.deleteMany();
   });
 
   describe("[POST] create a profile for an existing user", () => {

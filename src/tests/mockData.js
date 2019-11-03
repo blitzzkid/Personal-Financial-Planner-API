@@ -1,4 +1,4 @@
-const mockUsers = [
+module.exports.mockUsers = [
   {
     firstName: "Tom",
     lastName: "Hanks",
@@ -19,4 +19,13 @@ const mockUsers = [
   }
 ];
 
-module.exports = mockUsers;
+module.exports.mockProfiles = [
+  {
+    username: "user124",
+    birthYear: 1989,
+    retirementAge: 55,
+    passingAge: 75,
+    retirementIncome: 1500,
+    interestRate: 6
+  }
+];
