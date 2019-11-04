@@ -11,7 +11,11 @@ if (app.get("env") !== "test") {
 
 const corsOptions = {
   credentials: true,
-  origin: ["https://farmhome.netlify.com", "http://localhost:3000"],
+  origin: [
+    "https://farmhome.netlify.com",
+    "http://localhost:3000",
+    "http://localhost:3001"
+  ],
   allowedHeaders: "content-type"
 };
 
